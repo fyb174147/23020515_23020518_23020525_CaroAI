@@ -40,4 +40,4 @@ Script tạo file `ket_qua_thuc_nghiem.csv`, gồm 5 trạng thái kiểm thử,
 - `source/utils.py`: chuyển tọa độ, sinh pattern heuristic và Zobrist table.
 - `gui/`: giao diện Pygame.
 - `performance_eval.py`: benchmark phục vụ báo cáo.
-- `BAO_CAO.md`: báo cáo theo yêu cầu đề bài.
+- `BAO_CAO.pdf`: báo cáo theo yêu cầu đề bài.
