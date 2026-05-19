@@ -1,57 +1,43 @@
-# Gomoku AI in Python
-A simple [Gomoku](https://en.wikipedia.org/wiki/Gomoku) (or also called Five-In-A-Row) AI implemented in Python from scratch. 
+# Caro AI
 
-## :mag_right: Overview
-Gomoku is a strategy board game with 2 players and on a 15x15 board. The objective of the game is to form an unbroken chain of 5 stones (vertically, horizontally, diagonally) and the first player to do that wins the game. In this project, you can play against the AI that uses the MiniMax algorithm with alpha beta prunning in order to make the next move. Everything is integrated with a GUI made through `pygame`.
+Chương trình chơi cờ Caro 15x15 bằng Python/Pygame. Luật thắng theo đề bài: người chơi có 4 quân liên tiếp theo hàng ngang, hàng dọc hoặc đường chéo sẽ thắng; không xét luật chặn hai đầu.
 
-## :pushpin: Requirement
-In order to run this program, the `pygame` library must be installed first:
-```
-> pip install pygame
+## Cài đặt
+
+```bash
+pip install -r requirements.txt
 ```
 
-## :open_file_folder: Files Structure
-```
-├── assets
-│   └── black_piece.png
-│   └── board.jpg
-│   └── button.png
-│   └── menu_board.png
-│   └── white_piece.png
-├── gui
-│   └── button.py
-│   └── interface.py
-├── source
-│   └── AI.py
-│   └── gomoku.py
-│   └── utils.py
-├── .gitignore
-├── LICENSE
-├── README.md
-└── play.py
+## Chạy game
+
+```bash
+python play.py
 ```
 
-## :video_game: The Game: Execution
-For playing against the AI, run the following commands:
+Màn hình bắt đầu cho phép chọn:
+
+- `Human vs AI`: người chơi cầm đen, AI cầm trắng.
+- `AI vs Human`: AI cầm đen, người chơi cầm trắng.
+- `AI vs AI`: hai bên đều do AI điều khiển.
+- `Human vs Human`: hai người chơi luân phiên trên cùng máy.
+- Thuật toán AI: `Minimax` hoặc `Alpha-Beta`.
+
+Quân đen luôn đi trước. Khi AI đi, terminal sẽ in nước đi được chọn, giá trị đánh giá, độ sâu, số trạng thái đã xét và thời gian chạy.
+
+## Chạy thực nghiệm
+
+```bash
+python performance_eval.py
 ```
-> git clone https://github.com/husus/gomokuAI-py
-> cd gomokuAI-py
-> python3 play.py
-```
-<br>
 
-The image below is the starting screen of the game interface that would appear after the above-mentioned commands have been run correctly. The player can choose between black or white, and the other color will be assigned to the AI. Remember that according to the Gomoku rules, black always starts first.
-<br>
-<img width="541" alt="start_screen" src="https://user-images.githubusercontent.com/93041464/173566175-01f4e7cb-48ef-4a24-921d-eaa728baaaf3.png">
-<br>
-<br>
+Script tạo file `ket_qua_thuc_nghiem.csv`, gồm 5 trạng thái kiểm thử, các độ sâu 1, 2, 3 và kết quả so sánh Minimax với Alpha-Beta trên cùng trạng thái, cùng hàm đánh giá.
 
-To make the moves, it is necessary to simply click on the empty intersections of the board and one stone will be placed. The game keeps going by alternating turns between the human player and the AI until one of the two wins by forming an unbroken chain of five stones of the same color. Once the game ends, the following screen will pop out and the player can choose whether to restart the game or not. By selecting no, the pygame window will be closed automatically.
-<br>
-<img width="541" alt="end_screen" src="https://user-images.githubusercontent.com/93041464/174827463-e9241962-4d1e-4a2f-864d-2ef80431b8b6.png">
+## Cấu trúc chính
 
-<br> </br>
-
------------------------------------------------
-### Disclaimer
-This repository is part of the submission of the final project for the MSc course [20602 - COMPUTER SCIENCE (ALGORITHMS)](https://didattica.unibocconi.eu/ts/tsn_anteprima.php?cod_ins=20602&anno=2022&IdPag=) at Bocconi University.
+- `play.py`: vòng lặp game và xử lý bốn chế độ chơi.
+- `source/AI.py`: Minimax, Alpha-Beta pruning, hàm đánh giá, kiểm tra thắng/hòa.
+- `source/gomoku.py`: áp dụng nước đi, gọi AI và ghi nhận thông số tìm kiếm.
+- `source/utils.py`: chuyển tọa độ, sinh pattern heuristic và Zobrist table.
+- `gui/`: giao diện Pygame.
+- `performance_eval.py`: benchmark phục vụ báo cáo.
+- `BAO_CAO.md`: báo cáo theo yêu cầu đề bài.
