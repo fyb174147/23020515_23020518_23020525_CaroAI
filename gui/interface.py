@@ -40,16 +40,16 @@ class GameUI(object):
         img = self.blackPiece if color == 'black' else self.whitePiece
         self.screen.blit(img, (x - PIECE/2, y - PIECE/2))
 
-    def drawStatus(self, game_mode):
+    def drawStatus(self, game_mode, status_text=None):
         panel = pygame.Surface((SIZE, 34), pygame.SRCALPHA)
         panel.fill((0, 0, 0, 120))
         font = pygame.font.SysFont("arial", 14, bold=True)
         turn_name = "Black" if self.ai.turn == 1 else "White"
-        text = (
-            f"{game_mode} | Turn: {turn_name} | "
-            f"{self.ai.ai_mode.upper()} depth {self.ai.depth} | "
-            f"Last nodes: {self.ai.nodes_visited}"
-        )
+        if status_text is None:
+            status_text = f"{turn_name} to move"
+        text = f"{game_mode} | {status_text} | {self.ai.ai_mode.upper()} depth {self.ai.depth}"
+        if self.ai.nodes_visited:
+            text += f" | Last nodes: {self.ai.nodes_visited}"
         panel.blit(font.render(text, True, "white"), (12, 8))
         self.screen.blit(panel, (0, SIZE - 34))
 

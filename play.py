@@ -37,6 +37,25 @@ def reset_game(game, old_ai):
     return ai
 
 
+def turn_label(state):
+    return "Black" if state == 1 else "White"
+
+
+def draw_game_screen(game, ai, selected_mode, buttons, game_over=False, status_text=None):
+    game.screen.blit(game.board, (0, 0))
+    for i in range(15):
+        for j in range(15):
+            if ai.boardMap[i][j] != 0:
+                game.drawPiece(game.colorState[ai.boardMap[i][j]], i, j)
+
+    game.drawStatus(selected_mode, status_text)
+
+    if game_over:
+        game.drawResult(tie=(ai.checkResult() == 0))
+        buttons["yes"].draw(game.screen)
+        buttons["no"].draw(game.screen)
+
+
 def startGame():
     ai = GomokuAI(depth=3)
     game = GameUI(ai)
@@ -47,6 +66,7 @@ def startGame():
     selected_mode = "Human vs AI"
     in_menu = True
     game_over = False
+    ai_thinking = False
     run = True
 
     while run:
@@ -60,22 +80,24 @@ def startGame():
             buttons["minimax"].draw(game.screen)
             buttons["alphabeta"].draw(game.screen)
         else:
-            for i in range(15):
-                for j in range(15):
-                    if ai.boardMap[i][j] != 0:
-                        game.drawPiece(game.colorState[ai.boardMap[i][j]], i, j)
+            actor = MODES[selected_mode][ai.turn]
+            status_text = f"{turn_label(ai.turn)} to move"
+            if actor == "ai":
+                status_text = f"{turn_label(ai.turn)} AI thinking..."
+            draw_game_screen(game, ai, selected_mode, buttons, game_over, status_text)
 
-            game.drawStatus(selected_mode)
-
-            if not game_over and MODES[selected_mode][ai.turn] == "ai":
+            if not game_over and actor == "ai":
+                pygame.display.flip()
+                pygame.event.pump()
+                ai_thinking = True
                 move_i, move_j = gomoku.ai_move(ai, ai.turn)
+                pygame.event.clear([pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP])
+                ai_thinking = False
                 if move_i != -1 and ai.setState(move_i, move_j, ai.turn):
                     ai.turn *= -1
-
-            if game_over:
-                game.drawResult(tie=(ai.checkResult() == 0))
-                buttons["yes"].draw(game.screen)
-                buttons["no"].draw(game.screen)
+                if ai.checkResult() is not None:
+                    game_over = True
+                draw_game_screen(game, ai, selected_mode, buttons, game_over)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -102,13 +124,18 @@ def startGame():
                         ai = reset_game(game, ai)
                         in_menu = True
                         game_over = False
+                        ai_thinking = False
                         selected_mode = "Human vs AI"
                     if buttons["no"].rect.collidepoint(pos):
                         run = False
 
-                elif MODES[selected_mode][ai.turn] == "human":
+                elif not ai_thinking and MODES[selected_mode][ai.turn] == "human":
                     if gomoku.check_human_move(ai, pos, ai.turn):
                         ai.turn *= -1
+                        if ai.checkResult() is not None:
+                            game_over = True
+                        draw_game_screen(game, ai, selected_mode, buttons, game_over)
+                        pygame.display.flip()
 
         if not in_menu and not game_over and ai.checkResult() is not None:
             game_over = True
