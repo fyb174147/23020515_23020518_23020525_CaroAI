@@ -2,6 +2,11 @@
 
 Chương trình chơi cờ Caro 15x15 bằng Python/Pygame. Luật thắng theo đề bài: người chơi có 4 quân liên tiếp theo hàng ngang, hàng dọc hoặc đường chéo sẽ thắng; không xét luật chặn hai đầu.
 
+## Thành viên nhóm
+- 23020515 - Vũ Phúc Anh
+- 23020518 - Đàm Đại Dũng
+- 23020525 - Dương Nguyễn Minh Đức
+
 ## Cài đặt
 
 ```bash
